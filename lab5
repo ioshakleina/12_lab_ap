@@ -1,0 +1,125 @@
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+#include <cstdlib>
+#include <windows.h>
+
+using namespace std;
+
+const int ROWS = 3;    // Кількість рядків в масиві
+const int COLS = 3;    // Кількість стовпців в масиві
+
+// функція для введення елементів у квадратну матрицю з клавіатури 
+int* inputMatrix(int matr[size][size]) { 
+ 	SetConsoleCP(1251);  	
+    SetConsoleOutputCP(1251); 
+
+    	int** matr = new int* [size];  	for (int i = 0; i < size; i++) {  	 	matr[i] = new int[size];  	 	for (int j = 0; j < size; j++) { 
+ 	 	 	cout << "Введіть елемент [" << i << "][" << j << "]: "; 
+ 	 	 	cin >> matr[i][j]; 
+ 	 	} 
+ 	} 
+ 	return matr; 
+} 
+
+int* inputArray(int arr[ROWS][COLS]) {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    cout << "Введіть елементи масиву:\n";
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            cout << "arr[" << i << "][" << j << "]=";
+            cin >> arr[i][j];
+        }
+    }
+    return &arr[3][3];
+}
+
+// Функція для генерації елементів випадково
+int* generateRandomArray(int arr[ROWS][COLS]) {
+    srand((unsigned)time(NULL));
+    int min = 1, max = 25;
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            arr[i][j] = min + rand() % (max - min + 1);
+        }
+    }
+    return &arr[3][3];
+}
+
+// Функція для виводу масиву на екран
+void printArray(const int arr[3][3]) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            cout << arr[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+// Функція для заміни найбільшого елемента в заданому стовпці нулем
+int* replaceMaxWithZero(int arr[3][3], int col) {
+    int maxVal = arr[0][col];
+    int maxRow = 0;
+
+    // Знаходимо найбільший елемент у стовпці
+    for (int i = 1; i < 3; i++) {
+        if (arr[i][col] > maxVal) {
+            maxVal = arr[i][col];
+            maxRow = i;
+        }
+    }
+
+    // Замінюємо найбільший елемент на 0
+    arr[maxRow][col] = 0;
+    return &arr[3][3];
+}
+
+int main() {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    int array[ROWS][COLS];
+
+    // Генеруємо вручну
+    int* ptr1 = inputArray(array);
+    cout << endl;
+    cout << "1-й масив (введений з клавіатури)" << endl;
+    // Виводимо 1й
+    printArray(array);
+    cout << endl;
+
+    // Змінюємо елементи
+    int columnToReplace;
+    cout << "Введіть номер стовпця для заміни найбільшого елемента на 0: ";
+    cin >> columnToReplace;
+
+    if (columnToReplace >= 0 && columnToReplace < COLS) {
+        replaceMaxWithZero(array, columnToReplace);
+        cout << "Масив після заміни:" << endl;
+        printArray(array);
+    }
+    else {
+        cout << "Неправильний номер стовпця." << endl;
+    }
+
+    // Генеруємо 2й масив (згенерований рандомно)
+    int* ptr2 = generateRandomArray(array);
+    cout << "2-й масив (згенерований рандомно)" << endl;
+    printArray(array);
+    cout << endl;
+
+    // Змінюємо елементи
+    cout << "Введіть номер стовпця для заміни найбільшого елемента на 0: ";
+    cin >> columnToReplace;
+
+    if (columnToReplace >= 0 && columnToReplace < COLS) {
+        int* ptr3 = replaceMaxWithZero(array, columnToReplace);
+        cout << "Масив після заміни:" << endl;
+        printArray(array);
+    }
+    else {
+        cout << "Неправильний номер стовпця." << endl;
+    }
+
+    return 0;
+}
